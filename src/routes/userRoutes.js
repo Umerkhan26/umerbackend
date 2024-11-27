@@ -6,6 +6,7 @@ const {
   getUserById,
   updateUser,
   deleteUser,
+  loginUser,  // Import the login function
 } = require('../controllers/userController');
 
 // Register a new user
@@ -22,5 +23,6 @@ router.put('/:id', updateUser);
 
 // Delete user by ID
 router.delete('/:id', deleteUser);
+router.post('/login', loginUser);  // Add the login route
 
 module.exports = router;

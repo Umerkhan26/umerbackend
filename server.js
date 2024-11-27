@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./src/config/db');  // Assuming your database connection logic is inside this folder
 const userRoutes = require('./src/routes/userRoutes'); // Import the user routes (assuming routes are in the 'src/routes' folder)
+var cors = require('cors')
 
 dotenv.config();
 
@@ -9,6 +10,7 @@ dotenv.config();
 connectDB();
 
 const app = express();
+app.use(cors());
 
 // Middleware to parse incoming JSON requests
 app.use(express.json());
