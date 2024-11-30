@@ -74,9 +74,32 @@ const updateExam = async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   };
-
-module.exports = {
-  createExam,
-  getAllExams,
-  updateExam,
-};
+  const deleteExam = async (req, res) => {
+    try {
+      const { examId } = req.params;
+      const userId = req.userId; // Assume userId is attached to the request by middleware
+  
+      // Check if the user is an admin
+      const user = await User.findById(userId);
+      if (!user || user.role !== 'admin') {
+        return res.status(403).json({ message: 'Access denied. Admins only.' });
+      }
+  
+      // Find and delete the exam
+      const deletedExam = await Exam.findByIdAndDelete(examId);
+      if (!deletedExam) {
+        return res.status(404).json({ message: 'Exam not found' });
+      }
+  
+      res.status(200).json({ message: 'Exam deleted successfully', exam: deletedExam });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+  
+  module.exports = {
+    createExam,
+    getAllExams,
+    updateExam,
+    deleteExam,
+  };

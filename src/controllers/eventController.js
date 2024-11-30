@@ -47,8 +47,57 @@ const getAllEvents = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const updateEvent = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const userId = req.userId; // Assume userId is attached to the request by middleware
+    const updates = req.body;
+
+    // Validate user permissions
+    const user = await User.findById(userId);
+    if (!user || user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Admins only.' });
+    }
+
+    // Find the event and update it
+    const updatedEvent = await Event.findOneAndUpdate({ eventId }, updates, { new: true });
+    if (!updatedEvent) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    res.status(200).json({ message: 'Event updated successfully', event: updatedEvent });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Delete Event
+const deleteEvent = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const userId = req.userId; // Assume userId is attached to the request by middleware
+
+    // Validate user permissions
+    const user = await User.findById(userId);
+    if (!user || user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Admins only.' });
+    }
+
+    // Find and delete the event
+    const deletedEvent = await Event.findOneAndDelete({ eventId });
+    if (!deletedEvent) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    res.status(200).json({ message: 'Event deleted successfully', event: deletedEvent });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   createEvent,
   getAllEvents,
+  updateEvent,
+  deleteEvent,
 };

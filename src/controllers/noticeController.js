@@ -46,8 +46,63 @@ const getAllNotices = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const updateNotice = async (req, res) => {
+  try {
+    const { noticeId } = req.params;
+    const { title, date, description } = req.body;
+    const userId = req.userId;
+
+    // Check if the user is an admin
+    const user = await User.findById(userId);
+    if (!user || user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Admins only.' });
+    }
+
+    // Find the notice by ID
+    const notice = await Notice.findOne({ noticeId });
+    if (!notice) {
+      return res.status(404).json({ message: 'Notice not found' });
+    }
+
+    // Update only the fields that are provided in the request body
+    if (title) notice.title = title;
+    if (date) notice.date = date;
+    if (description) notice.description = description;
+
+    await notice.save();
+    res.status(200).json({ message: 'Notice updated successfully', notice });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Delete a Notice (With Admin Check)
+const deleteNotice = async (req, res) => {
+  try {
+    const { noticeId } = req.params;
+    const userId = req.userId;
+
+    // Check if the user is an admin
+    const user = await User.findById(userId);
+    if (!user || user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Admins only.' });
+    }
+
+    // Find and delete the notice by ID
+    const notice = await Notice.findOneAndDelete({ noticeId });
+    if (!notice) {
+      return res.status(404).json({ message: 'Notice not found' });
+    }
+
+    res.status(200).json({ message: 'Notice deleted successfully', notice });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   createNotice,
   getAllNotices,
+  updateNotice,
+  deleteNotice,
 };
