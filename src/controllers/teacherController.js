@@ -53,8 +53,52 @@ const getAllTeachers = async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   };
+
+
+  const updateTeacherProfile = async (req, res) => {
+    try {
+      const { teacherName, teacherEmail, teacherPhone, gender, subject } = req.body;
+      const teacherId = req.userId; // Get the userId from the request object, set by the middleware
+  
+      // Find the teacher by their userId
+      const teacher = await Teacher.findOne({ user: teacherId });
+      if (!teacher) {
+        return res.status(400).json({ message: 'Teacher not found' });
+      }
+  
+      // Check for uniqueness of the email and phone if they are being updated
+      if (teacherEmail && teacherEmail !== teacher.teacherEmail) {
+        const isEmailUnique = await Teacher.checkUniqueEmailAndPhone(teacherEmail, null);
+        if (!isEmailUnique) {
+          return res.status(400).json({ message: 'Email is already taken' });
+        }
+      }
+  
+      if (teacherPhone && teacherPhone !== teacher.teacherPhone) {
+        const isPhoneUnique = await Teacher.checkUniqueEmailAndPhone(null, teacherPhone);
+        if (!isPhoneUnique) {
+          return res.status(400).json({ message: 'Phone number is already taken' });
+        }
+      }
+  
+      // Update teacher fields if provided
+      if (teacherName) teacher.teacherName = teacherName;
+      if (teacherEmail) teacher.teacherEmail = teacherEmail;
+      if (teacherPhone) teacher.teacherPhone = teacherPhone;
+      if (gender) teacher.gender = gender;
+      if (subject) teacher.subject = subject;
+  
+      // Save the updated teacher data
+      await teacher.save();
+  
+      res.status(200).json({ message: 'Teacher profile updated successfully', teacher });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
   
   module.exports = {
     createTeacherWithUser,
     getAllTeachers,
+    updateTeacherProfile ,
   };

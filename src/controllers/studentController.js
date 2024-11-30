@@ -48,8 +48,48 @@ const getAllStudents = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const updateStudentProfile = async (req, res) => {
+  try {
+    const { studentName, registrationNumber, class: studentClass, section, email, gender } = req.body;
+    const userId = req.userId; // Get userId from the request object, set by the middleware
 
+    // Validate if the logged-in user is a student
+    const student = await Student.findOne({ user: userId });  // Find student based on userId
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    // Only allow updates on the student profile associated with the logged-in user
+    if (student.user.toString() !== userId) {
+      return res.status(403).json({ message: 'You are not authorized to update this profile' });
+    }
+
+    // Check if the email or registration number is being changed and validate uniqueness
+    if (email && email !== student.email) {
+      const isEmailUnique = await Student.checkUniqueEmailAndRegNumber(email, registrationNumber);
+      if (!isEmailUnique) {
+        return res.status(400).json({ message: 'Email or Registration Number already exists' });
+      }
+    }
+
+    // Update the student fields (you can update only the provided fields)
+    student.studentName = studentName || student.studentName;
+    student.registrationNumber = registrationNumber || student.registrationNumber;
+    student.class = studentClass || student.class;
+    student.section = section || student.section;
+    student.email = email || student.email;
+    student.gender = gender || student.gender;
+
+    // Save the updated student profile
+    await student.save();
+    
+    res.status(200).json({ message: 'Student profile updated successfully', student });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   createStudentWithUser,
   getAllStudents,
+  updateStudentProfile,
 };
