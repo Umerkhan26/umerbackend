@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Thank You for Contacting Us</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #F4F7FA;
+            font-family: 'Arial', sans-serif;
+        }
+
+        table {
+            border-collapse: collapse;
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        img {
+            border: 0;
+            height: auto;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        h1,
+        p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background-color: #FFFFFF;
+            padding: 40px;
+            max-width: 600px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: auto;
+            text-align: center;
+        }
+
+        img.logo {
+            display: block;
+            margin: 0 auto 12px;
+            width: 80px;
+            height: 80px;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333333;
+            margin-bottom: 5px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .review-link-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        .review-link {
+            background-color: #1a8797;
+            color: #FFFFFF !important;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .review-link:hover {
+            background-color: #13767e;
+            color: #FFFFFF !important;
+        }
+
+        .footer {
+            background-color: #f1f1f1;
+            color: #000000;
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid #dddddd;
+            font-size: 14px;
+        }
+
+        .social-links {
+            margin: 10px 0;
+        }
+
+        .social-links a {
+            color: #000000;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        .social-links img {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.2s;
+        }
+
+        .social-links img:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Dear {{name}},</h1>
+    <p>Thank you for reaching out! We have received your message with the following details:</p>
+    <ul>
+        <li><strong>Subject:</strong> {{subject}}</li>
+        <li><strong>Message:</strong> {{message}}</li>
+    </ul>
+    <p>Our team will get back to you as soon as possible.</p>
+    <p>Best regards,</p>
+    <p>Admin</p>
+
+    <div class="footer">
+        <div class="social-links">
+            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+                <img src="https://img.icons8.com/ios-filled/50/000000/facebook-new.png" alt="Facebook" />
+            </a>
+            <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
+                <img src="https://img.icons8.com/ios-filled/50/000000/twitter-squared.png" alt="Twitter" />
+            </a>
+            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+                <img src="https://img.icons8.com/ios-filled/50/000000/instagram-new.png" alt="Instagram" />
+            </a>
+            <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+                <img src="https://img.icons8.com/ios-filled/50/000000/linkedin.png" alt="LinkedIn" />
+            </a>
+        </div>
+        <p>&copy; 2024 Your Company. All Rights Reserved.</p>
+    </div>
+</body>
+
+</html>
